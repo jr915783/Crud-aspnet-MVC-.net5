@@ -1,0 +1,108 @@
+﻿@model List<UnidadeModel>
+@{
+    ViewData["Title"] = "Listagem de unidades";
+}
+
+<div class="text-center">
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-2">
+        <a class="btn btn-primary" asp-controller="Unidade" asp-action="Criar" role="button">Adicionar nova unidade</a>
+    </div>
+
+    <br />
+
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" data-bs-dismiss="alert" aria-label="Close">X</button>
+            @TempData["MensagemSucesso"]
+        </div>
+    }
+
+    @if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" data-bs-dismiss="alert" aria-label="Close">X</button>
+            @TempData["MensagemErro"]
+        </div>
+    }
+
+    <br />
+
+    <h2 class="display-6 mb-3">Listagem de unidades</h2>
+
+    <table id="table-usuarios" class="display mb-3" style="width:100%">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Status</th>               
+                <th scope="col">Qnt Colaboradores</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var unidade in Model)
+                {
+                    <tr>
+                        <th scope="row">@unidade.Id</th>
+                        <td>@unidade.Nome</td>
+                        <td>@(unidade.Status == ControleDeContatos.Enums.StatusEnum.Ativo ? "Ativo" : "Inativo")</td>
+                        <td>
+                            <a href="javascript:" unidade-id="@unidade.Id" class="btn btn-success btn-sm btn-total-contatos">
+                                @(unidade.Colaboradores != null && unidade.Colaboradores.Any() ? unidade.Colaboradores.Count() : 0)
+                            </a>
+                        </td>                       
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a role="button" asp-action="Editar" asp-controller="Unidade" asp-route-id="@unidade.Id" class="btn btn-primary">Editar</a>
+                                <a role="button" href="javascript:" unidade-id="@unidade.Id" class="btn btn-danger btn-sm btn-delete-unidade">Apagar</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="odd"><td valign="top" colspan="5">Nenhuma unidade encontrada</td></tr>
+            }
+        </tbody>
+    </table>
+
+
+    <div id="modalContatosUsuario" class="modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Listagem de Colaboradores</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="listaContatosUsuario"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="modalApagarUnidade" class="modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Excluir Unidade</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="unidade"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

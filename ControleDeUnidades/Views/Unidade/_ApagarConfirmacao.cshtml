@@ -1,0 +1,11 @@
+﻿@model UnidadeModel
+@{
+    ViewData["Title"] = "Confirmação apagar unidade";
+}
+
+<div class="text-center">
+    <h5>Realmente deseja apagar a unidade (@Model.Nome)?</h5>
+</div>
+
+<a class="btn btn-primary" asp-action="Index" asp-controller="Unidade" role="button">Cancelar exclusão</a>
+<a class="btn btn-danger" asp-action="Apagar" asp-controller="Unidade" asp-route-id="@Model.Id" role="button">Confirmar exclusão</a>

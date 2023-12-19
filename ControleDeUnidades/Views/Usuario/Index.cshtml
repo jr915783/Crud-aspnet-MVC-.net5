@@ -1,0 +1,87 @@
+﻿@model List<UsuarioModel>
+@{
+    ViewData["Title"] = "Listagem de Usuários";
+}
+
+<div class="text-center">
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start mt-2">
+        <a class="btn btn-primary" asp-controller="Usuario" asp-action="Criar" role="button">Adicionar novo usuário</a>
+    </div>
+
+    <br />
+
+    @if (TempData["MensagemSucesso"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" data-bs-dismiss="alert" aria-label="Close">X</button>
+            @TempData["MensagemSucesso"]
+        </div>
+    }
+
+    @if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="btn btn-danger btn-sm close-alert" data-bs-dismiss="alert" aria-label="Close">X</button>
+            @TempData["MensagemErro"]
+        </div>
+    }
+
+    <br />
+
+    <h2 class="display-6 mb-2">Listagem de usuários</h2>
+
+    <table id="table-usuarios" class="display mb-3" style="width:100%">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Login</th>                
+                <th scope="col">Perfil</th>               
+                <th scope="col">Data de cadastro</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var usuario in Model)
+                {
+                    <tr>
+                        <th scope="row">@usuario.Id</th>
+                        <td>@usuario.Nome</td>
+                        <td>@usuario.Login</td>                        
+                        <td>@(usuario.Perfil == ControleDeContatos.Enums.StatusEnum.Ativo ? "Ativo" : "Inativo")</td>                        
+                        <td>@usuario.DataCadastro</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a role="button" asp-action="Editar" asp-controller="Usuario" asp-route-id="@usuario.Id" class="btn btn-primary">Editar</a>
+                                <a role="button" href="javascript:" usuario-id="@usuario.Id" class="btn btn-danger btn-sm btn-delete-usuario">Apagar</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="odd"><td valign="top" colspan="5">Nenhum usuário encontrado</td></tr>
+            }
+        </tbody>
+    </table>
+
+    <div id="modalApagarUsuario" class="modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Excluir Usuário</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="usuario"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
